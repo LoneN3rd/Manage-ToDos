@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -29,12 +30,12 @@ public class Todo {
     private Boolean completed = false;
 
     //@CreationTimestamp
-    private Date createdOn;
+    private LocalDateTime createdOn;
 
     private String createdBy;
 
     //@UpdateTimestamp
-    private Date lastUpdatedOn;
+    private LocalDateTime lastUpdatedOn;
 
     private String lastUpdatedBy;
 
