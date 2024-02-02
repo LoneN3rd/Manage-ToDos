@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
@@ -12,9 +13,10 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collation = "todos")
+@Document(collection = "todos")
 public class Todo {
 
+    @Id
     private String id;
 
     private String todo;
@@ -28,7 +30,10 @@ public class Todo {
 
     private String createdBy;
 
-    private Date updatedOn;
+    //@UpdateTimestamp
+    private Date lastUpdatedOn;
 
-    private String updatedBy;
+    private String lastUpdatedBy;
+
+    private Integer isDeleted = 0;
 }
