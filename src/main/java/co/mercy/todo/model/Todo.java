@@ -1,5 +1,6 @@
 package co.mercy.todo.model;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,11 +20,13 @@ public class Todo {
     @Id
     private String id;
 
+    @NotBlank(message = "Todo cannot be null")
     private String todo;
 
+    @NotBlank(message = "Description cannot be null")
     private String description;
 
-    private Boolean completed;
+    private Boolean completed = false;
 
     //@CreationTimestamp
     private Date createdOn;
