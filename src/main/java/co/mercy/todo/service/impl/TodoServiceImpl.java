@@ -7,7 +7,7 @@ import java.util.List;
 
 public class TodoServiceImpl implements TodoService {
     @Override
-    public Todo getAll() {
+    public List<Todo> getAll() {
         return null;
     }
 

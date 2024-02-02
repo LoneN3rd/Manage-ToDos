@@ -5,7 +5,7 @@ import co.mercy.todo.model.Todo;
 import java.util.List;
 
 public interface TodoService {
-    Todo getAll();
+    List<Todo> getAll();
 
     Todo getTodoById(String id);
 
