@@ -1,4 +1,4 @@
-# ToDo
+# Manage ToDos
 A simple Spring Boot project demonstrating data persistence with MongoDB
 
 # Handler Methods
