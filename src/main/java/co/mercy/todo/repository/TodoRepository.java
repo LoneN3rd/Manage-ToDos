@@ -13,16 +13,15 @@ import java.util.Optional;
 @Repository
 public interface TodoRepository extends MongoRepository<Todo, String> {
 
-    @Query("{'todo': ?0, 'isDeleted': ?1}")
     List<Todo> findByTodoAndIsDeleted(String todo, int deleted);
 
-    List<Todo> findByTodoAndCreatedOnBetween(String todo, Date from, Date to);
+    Optional<Todo> findByIdAndIsDeleted(String id, int deleted);
 
-    List<Todo> findByCreatedOnBetween(Date from, Date to);
+    List<Todo> findByTodoAndIsDeletedAndCreatedOnBetween(String todo, int deleted, Date from, Date to);
 
-    @Query("{'isDeleted': ?0}")
-    List<Todo> findAll(int deleted);
+    List<Todo> findByCreatedOnBetween(Date from, Date to, int deleted);
 
-    @Query("{'completed': ?0}")
-    List<Todo> findByCompleted(boolean status);
+    List<Todo> findByIsDeleted(int deleted);
+
+    List<Todo> findByCompletedAndIsDeleted(boolean status, int deleted);
 }

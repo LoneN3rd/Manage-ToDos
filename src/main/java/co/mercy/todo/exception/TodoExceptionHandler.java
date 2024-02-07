@@ -8,15 +8,15 @@ public class TodoExceptionHandler extends Exception{
         super(message);
     }
 
-    public static String IDNotFoundException(String id){
-        return "Todo with id "+id+" not found";
+    public static String IDNotFound(String id){
+        return "Todo with id "+ id +" not found";
+    }
+
+    public static String NameNotFoundException(String name){
+        return "Todo with id "+name+" not found";
     }
 
     public static String AlreadyExists(String todoName){
         return "A todo with name '"+ todoName +"' was created today";
     }
-
-
-    // return new ResponseEntity<>("Todo with name "+ name +" not found", HttpStatus.NOT_FOUND);
-    // return new ResponseEntity<>("No todos created today", HttpStatus.NOT_FOUND);
 }
