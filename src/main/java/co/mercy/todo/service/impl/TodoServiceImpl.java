@@ -6,6 +6,10 @@ import co.mercy.todo.repository.TodoRepository;
 import co.mercy.todo.service.TodoService;
 import jakarta.validation.ConstraintDeclarationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +29,9 @@ public class TodoServiceImpl implements TodoService {
     private final Date to = Date.from(tomorrow.toInstant());
 
     @Override
-    public List<Todo> getAll() {
-       return todoRepository.findByIsDeleted(0);
+    public List<Todo> getAll(int pageNumber, int pageSize) {
+        Pageable pages = PageRequest.of(pageNumber, pageSize, Sort.Direction.DESC, "createdOn");
+       return todoRepository.findByIsDeleted(0, pages);
     }
 
     @Override
@@ -35,26 +40,28 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public List<Todo> getTodoByName(String name) {
-        return todoRepository.findByTodoAndIsDeleted(name, 0);
+    public List<Todo> getTodoByName(String name, int pageNumber, int pageSize) {
+        Pageable pages = PageRequest.of(pageNumber, pageSize, Sort.Direction.DESC, "createdOn");
+        return todoRepository.findByTodoAndIsDeleted(name, 0, pages);
     }
 
     @Override
-    public List<Todo> getCompleteTodos() {
-        return todoRepository.findByCompletedAndIsDeleted(true, 0);
+    public List<Todo> getCompleteTodos(int pageNumber, int pageSize) {
+        Pageable pages = PageRequest.of(pageNumber, pageSize, Sort.Direction.DESC, "createdOn");
+        return todoRepository.findByCompletedAndIsDeleted(true, 0, pages);
     }
 
     @Override
-    public List<Todo> getIncompleteTodos() {
-        return todoRepository.findByCompletedAndIsDeleted(false, 0);
+    public List<Todo> getIncompleteTodos(int pageNumber, int pageSize) {
+        Pageable pages = PageRequest.of(pageNumber, pageSize, Sort.Direction.DESC, "createdOn");
+        return todoRepository.findByCompletedAndIsDeleted(false, 0, pages);
     }
 
     @Override
     public Todo createTodo(Todo todo) throws ConstraintDeclarationException, TodoExceptionHandler {
         // TODO: move this logic to the service layer
-        List<Todo> existingTodos = this.findByTodoCreatedToday(todo.getTodo());
-        System.out.println("Existing todos count: "+ existingTodos.size());
-        if(existingTodos.isEmpty()){
+        Optional<Todo> existingTodo = this.findByTodoCreatedToday(todo.getTodo());
+        if(existingTodo.isEmpty()){
             System.out.println("Creating todo with name '"+ todo.getTodo() +"'");
             todo.setCreatedOn(LocalDateTime.now());
             todo.setCreatedBy("mmutuku");
@@ -71,12 +78,18 @@ public class TodoServiceImpl implements TodoService {
     public Todo updateTodo(Todo todo, String id) throws TodoExceptionHandler {
         Optional<Todo> existingTodo = this.getTodoById(id);
         if(existingTodo.isPresent()) {
+            Optional<Todo> sameName = this.findByTodoCreatedToday(todo.getTodo());
+            if (sameName.isPresent() && !sameName.get().getId().equals(id)){
+                throw new TodoExceptionHandler(TodoExceptionHandler.AlreadyExists(todo.getTodo()));
+            }
+
             Todo existing = existingTodo.get();
             existing.setTodo(todo.getTodo() != null ? todo.getTodo() : existingTodo.get().getTodo());
             existing.setDescription(todo.getDescription() != null ? todo.getDescription() : existingTodo.get().getDescription());
             existing.setCompleted(todo.getCompleted() != null ? todo.getCompleted() : existingTodo.get().getCompleted());
             existing.setLastUpdatedOn(LocalDateTime.now());
             return todoRepository.save(existing);
+
         } else {
             System.out.println("Throwing IDNotFound exception");
             throw new TodoExceptionHandler(TodoExceptionHandler.IDNotFound(id));
@@ -113,13 +126,14 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public List<Todo> findByTodoCreatedToday(String todo) {
+    public Optional<Todo> findByTodoCreatedToday(String todo) {
         System.out.println("Getting todos with name '"+ todo +"', AND created between " + Date.from(today.toInstant()) +" and "+ Date.from(tomorrow.toInstant()));
         return todoRepository.findByTodoAndIsDeletedAndCreatedOnBetween(todo, 0, from, to);
     }
 
     @Override
-    public List<Todo> createdToday() {
-        return todoRepository.findByCreatedOnBetween(from, to, 0);
+    public List<Todo> createdToday(int pageNumber, int pageSize) {
+        Pageable pages = PageRequest.of(pageNumber, pageSize, Sort.Direction.DESC, "createdOn");
+        return todoRepository.findByCreatedOnBetween(from, to, 0, pages);
     }
 }

@@ -13,7 +13,7 @@ public class TodoExceptionHandler extends Exception{
     }
 
     public static String NameNotFoundException(String name){
-        return "Todo with id "+name+" not found";
+        return "Todo with id "+ name +" not found";
     }
 
     public static String AlreadyExists(String todoName){

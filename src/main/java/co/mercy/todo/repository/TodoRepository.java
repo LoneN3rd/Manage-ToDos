@@ -1,6 +1,7 @@
 package co.mercy.todo.repository;
 
 import co.mercy.todo.model.Todo;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -13,15 +14,15 @@ import java.util.Optional;
 @Repository
 public interface TodoRepository extends MongoRepository<Todo, String> {
 
-    List<Todo> findByTodoAndIsDeleted(String todo, int deleted);
+    List<Todo> findByTodoAndIsDeleted(String todo, int deleted, Pageable pages);
 
     Optional<Todo> findByIdAndIsDeleted(String id, int deleted);
 
-    List<Todo> findByTodoAndIsDeletedAndCreatedOnBetween(String todo, int deleted, Date from, Date to);
+    Optional<Todo> findByTodoAndIsDeletedAndCreatedOnBetween(String todo, int deleted, Date from, Date to);
 
-    List<Todo> findByCreatedOnBetween(Date from, Date to, int deleted);
+    List<Todo> findByCreatedOnBetween(Date from, Date to, int deleted, Pageable pages);
 
-    List<Todo> findByIsDeleted(int deleted);
+    List<Todo> findByIsDeleted(int deleted, Pageable pages);
 
-    List<Todo> findByCompletedAndIsDeleted(boolean status, int deleted);
+    List<Todo> findByCompletedAndIsDeleted(boolean status, int deleted, Pageable pages);
 }

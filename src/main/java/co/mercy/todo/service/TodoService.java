@@ -7,15 +7,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TodoService {
-    List<Todo> getAll();
+    List<Todo> getAll(int pageNumber, int pageSize);
 
     Optional<Todo> getTodoById(String id) throws TodoExceptionHandler;
 
-    List<Todo> getTodoByName(String name);
+    List<Todo> getTodoByName(String name, int pageNumber, int pageSize);
 
-    List<Todo> getCompleteTodos();
+    List<Todo> getCompleteTodos(int pageNumber, int pageSize);
 
-    List<Todo> getIncompleteTodos();
+    List<Todo> getIncompleteTodos(int pageNumber, int pageSize);
 
     Todo createTodo(Todo todo) throws TodoExceptionHandler;
 
@@ -25,7 +25,7 @@ public interface TodoService {
 
     String deleteTodo(String id) throws TodoExceptionHandler;
 
-    List<Todo> findByTodoCreatedToday(String todo);
+    Optional<Todo> findByTodoCreatedToday(String todo);
 
-    List<Todo> createdToday();
+    List<Todo> createdToday(int pageNumber, int pageSize);
 }

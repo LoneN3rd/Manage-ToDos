@@ -3,6 +3,7 @@ package co.mercy.todo.controller;
 import co.mercy.todo.exception.TodoExceptionHandler;
 import co.mercy.todo.model.Todo;
 import co.mercy.todo.service.TodoService;
+import jakarta.validation.ConstraintDeclarationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,18 +23,18 @@ public class TodoController {
     TodoService todoService;
 
     @GetMapping("/all")
-    private ResponseEntity<?> getAllTodos(){
-        return new ResponseEntity<>(todoService.getAll(), HttpStatus.OK);
+    private ResponseEntity<?> getAllTodos(@RequestParam Integer pageNumber, @RequestParam Integer pageSize){
+        return new ResponseEntity<>(todoService.getAll(pageNumber, pageSize), HttpStatus.OK);
     }
 
     @GetMapping("/all/complete")
-    public ResponseEntity<List<Todo>> getCompleteTodos(){
-        return new ResponseEntity<>(todoService.getCompleteTodos(), HttpStatus.OK);
+    public ResponseEntity<List<Todo>> getCompleteTodos(@RequestParam Integer pageNumber, @RequestParam Integer pageSize){
+        return new ResponseEntity<>(todoService.getCompleteTodos(pageNumber, pageSize), HttpStatus.OK);
     }
 
     @GetMapping("/all/incomplete")
-    public ResponseEntity<List<Todo>> getIncompleteTodos(){
-        return new ResponseEntity<>(todoService.getIncompleteTodos(), HttpStatus.OK);
+    public ResponseEntity<List<Todo>> getIncompleteTodos(@RequestParam Integer pageNumber, @RequestParam Integer pageSize){
+        return new ResponseEntity<>(todoService.getIncompleteTodos(pageNumber, pageSize), HttpStatus.OK);
     }
 
     @GetMapping("/id/{id}")
@@ -46,13 +47,13 @@ public class TodoController {
     }
 
     @GetMapping("/name")
-    public ResponseEntity<?> getTodoByName(@RequestParam String name){
-        return new ResponseEntity<>(todoService.getTodoByName(name), HttpStatus.OK);
+    public ResponseEntity<?> getTodoByName(@RequestParam String name, @RequestParam Integer pageNumber, @RequestParam Integer pageSize){
+        return new ResponseEntity<>(todoService.getTodoByName(name, pageNumber, pageSize), HttpStatus.OK);
     }
 
     @GetMapping("/today")
-    public ResponseEntity<?> getTodosCreatedToday(){
-        return new ResponseEntity<>(todoService.createdToday(), HttpStatus.OK);
+    public ResponseEntity<?> getTodosCreatedToday(@RequestParam Integer pageNumber, @RequestParam Integer pageSize){
+        return new ResponseEntity<>(todoService.createdToday(pageNumber, pageSize), HttpStatus.OK);
     }
 
     @PostMapping("/create")
