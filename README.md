@@ -10,10 +10,12 @@ A simple Spring Boot project demonstrating data persistence with MongoDB
 - Create ToDo
 - Update ToDo
 - Delete ToDo (updates delete status, not actual deletion)
+- Get ToDos created today
+- Mark a ToDo as completed
 
 # Covered
 - Data persistence with MongoDB
-- Custom queries
+- Custom repository methods
 - Input validation
 - Pagination and sorting
 - Documentation using Swagger
